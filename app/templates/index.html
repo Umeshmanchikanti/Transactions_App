@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transactions App</title>
+</head>
+<body>
+    <h1>Transactions</h1>
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <div>
+            {{ form.reason.label }}<br>
+            {{ form.reason(size=40) }}
+        </div>
+        <div>
+            {{ form.bill_image.label }}<br>
+            {{ form.bill_image() }}
+        </div>
+        <div>
+            {{ form.submit() }}
+        </div>
+    </form>
+
+    <h2>Transaction List</h2>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Date</th>
+            <th>Reason</th>
+            <th>Bill Image</th>
+        </tr>
+        {% for transaction in transactions %}
+        <tr>
+            <td>{{ transaction.id }}</td>
+            <td>{{ transaction.date.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+            <td>{{ transaction.reason }}</td>
+            <td>
+                {% if transaction.bill_image %}
+                <a href="{{ url_for('static', filename='uploads/' + transaction.bill_image) }}" target="_blank">View Bill</a>
+                {% else %}
+                No Image
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <br>
+    <a href="{{ url_for('home.export_transactions') }}">Export to Excel</a>
+</body>
+</html>
